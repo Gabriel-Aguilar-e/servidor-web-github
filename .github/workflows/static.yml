@@ -50,3 +50,15 @@ jobs:
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
+
+      - name: Purge Cloudflare Cache
+        if: ${{ always() }}
+        run: |
+          echo "Purgando caché en Cloudflare..."
+          curl -X POST "https://api.cloudflare.com/client/v4/zones/3b23479218b804b20660f3d6cedc24e1/purge_cache" \
+          -H "Authorization: Bearer gv1Z6LGu_wi8QWZqPsFtOZ24aNDWF_R2ifYVvwJd" \
+          -H "Content-Type: application/json" \
+          --data '{"purge_everything": true}'
+      
+      - name: Notify Optimization
+        run: echo "El sitio se ha desplegado y se beneficiará de las optimizaciones de Cloudflare (caché, compresión, auto minify, etc.)."
